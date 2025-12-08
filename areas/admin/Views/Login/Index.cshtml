@@ -1,0 +1,16 @@
+﻿@page
+@model odev.dagitim.portali.areas.admin.Views.Login.IndexModel
+@{
+}
+<h2>Admin Giriş</h2>
+
+@if (ViewBag.Hata != null)
+{
+    <p style="color:red;">@ViewBag.Hata</p>
+}
+
+<form method="post" action="/Admin/Login/Giris">
+    <input type="text" name="kullanici" placeholder="Kullanıcı Adı" /><br /><br />
+    <input type="password" name="sifre" placeholder="Şifre" /><br /><br />
+    <button type="submit">Giriş Yap</button>
+</form>

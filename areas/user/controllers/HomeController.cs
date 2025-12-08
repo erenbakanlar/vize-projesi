@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace odev.dagitim.portali.areas.user.controllers
+[Area("User")]
+public class HomeController : Controller
 {
-    [Area("user")]
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return RedirectToAction("Index", "Panel", new { area = "User" });
     }
 }

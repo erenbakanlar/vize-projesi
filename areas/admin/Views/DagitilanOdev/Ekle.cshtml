@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mb-4">📢 Yeni Ödev Dağıt</h2>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+
+        <div class="card shadow p-4">
+            <form method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Ödev Başlığı</label>
+                    <input type="text" name="Baslik" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Açıklama</label>
+                    <textarea name="Aciklama" class="form-control" rows="4" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Son Teslim Tarihi</label>
+                    <input type="date" name="SonTeslimTarihi" class="form-control" required />
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    ✅ Ödevi Yayınla
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+</div>

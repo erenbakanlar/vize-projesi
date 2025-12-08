@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
-namespace odev.dagitim.portali.Areas.Admin.Controllers
+namespace odev.dagitim.portali.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         public IActionResult Index()

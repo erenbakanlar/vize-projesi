@@ -1,12 +1,37 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using odev.dagitim.portali.repositories;
+using odev.dagitim.portali.repositories;
+using Microsoft.EntityFrameworkCore;
+using odev.dagitim.portali.data;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "MyCookieAuth";
+    options.DefaultChallengeScheme = "MyCookieAuth";
+})
+.AddCookie("MyCookieAuth", options =>
+{
+    options.LoginPath = "/Admin/Login/Index";
+});
+
+
 builder.Services.AddRazorPages();
-builder.Services.AddControllersWithViews(); // ← BUNU EKLEDİK
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+builder.Services.AddScoped<IOgrenciRepository, OgrenciRepository>();
+builder.Services.AddScoped<IOdevRepository, OdevRepository>();
+builder.Services.AddScoped<IDagitilanOdevRepository, DagitilanOdevRepository>();
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -16,10 +41,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
+app.UseRouting();        
+
+app.UseSession();        
+app.UseAuthentication(); 
 app.UseAuthorization();
 
-// ← BUNLARI EKLE
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
@@ -30,3 +57,4 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 app.Run();
+

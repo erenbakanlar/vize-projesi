@@ -1,0 +1,12 @@
+﻿<h2>Öğrenci Girişi</h2>
+
+@if (ViewBag.Hata != null)
+{
+    <p style="color:red">@ViewBag.Hata</p>
+}
+
+<form method="post">
+    <input type="text" name="Numara" placeholder="Öğrenci Numara" /><br /><br />
+    <input type="password" name="Sifre" placeholder="Şifre" /><br /><br />
+    <button type="submit">Giriş Yap</button>
+</form>
