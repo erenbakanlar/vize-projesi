@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 namespace odev.dagitim.portali.Areas.Admin.Controllers
@@ -11,5 +12,7 @@ namespace odev.dagitim.portali.Areas.Admin.Controllers
         {
             return View();
         }
+
+
     }
 }

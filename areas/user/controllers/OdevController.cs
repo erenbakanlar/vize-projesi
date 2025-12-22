@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using odev.dagitim.portali.data;
 using odev.dagitim.portali.models;
 
 namespace odev.dagitim.portali.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize]
     public class OdevController : Controller
     {
         private readonly AppDbContext _context;
@@ -14,56 +16,46 @@ namespace odev.dagitim.portali.Areas.User.Controllers
             _context = context;
         }
 
+       
         public IActionResult Yukle()
         {
-            var ogrenciId = HttpContext.Session.GetInt32("OgrenciId");
-
-            if (ogrenciId == null)
-            {
-                return RedirectToAction("Index", "Login", new { area = "User" });
-            }
-
             return View();
         }
 
+       
         [HttpPost]
-        public IActionResult Yukle(IFormFile dosya)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Yukle(IFormFile dosya)
         {
-            var ogrenciId = HttpContext.Session.GetInt32("OgrenciId");
-
-            if (ogrenciId == null)
+            if (dosya == null || dosya.Length == 0)
             {
-                return RedirectToAction("Index", "Login", new { area = "User" });
+                ViewBag.Mesaj = "Dosya seçmedin.";
+                return View();
             }
 
-            if (dosya != null && dosya.Length > 0)
+            var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "odevler");
+            if (!Directory.Exists(uploadFolder))
+                Directory.CreateDirectory(uploadFolder);
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dosya.FileName);
+            var filePath = Path.Combine(uploadFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/odevler");
-
-                if (!Directory.Exists(uploadsFolder))
-                    Directory.CreateDirectory(uploadsFolder);
-
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dosya.FileName);
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    dosya.CopyTo(stream);
-                }
-
-                Odev yeniOdev = new Odev
-                {
-                    OgrenciId = ogrenciId.Value,
-                    DosyaYolu = "/odevler/" + fileName,
-                    YuklemeTarihi = DateTime.Now
-                };
-
-                _context.Odevler.Add(yeniOdev);
-                _context.SaveChanges();
-
-                ViewBag.Mesaj = "Ödev başarıyla yüklendi!";
+                await dosya.CopyToAsync(stream);
             }
 
+            var yeniOdev = new Odev
+            {
+                OgrenciId = 0,
+                DosyaYolu = "/odevler/" + fileName,
+                YuklemeTarihi = DateTime.Now
+            };
+
+            _context.Odevler.Add(yeniOdev);
+            await _context.SaveChangesAsync();
+
+            ViewBag.Mesaj = "Ödev başarıyla yüklendi!";
             return View();
         }
     }

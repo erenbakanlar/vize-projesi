@@ -1,4 +1,5 @@
-﻿using odev.dagitim.portali.repositories;
+﻿using Microsoft.AspNetCore.Authorization;
+using odev.dagitim.portali.repositories;
 using Microsoft.AspNetCore.Mvc;
 using odev.dagitim.portali.data;
 using odev.dagitim.portali.models;
@@ -6,6 +7,7 @@ using odev.dagitim.portali.models;
 namespace odev.dagitim.portali.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class OgrenciController : Controller
     {
         private readonly IOgrenciRepository _ogrenciRepository;

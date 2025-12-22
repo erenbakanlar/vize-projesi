@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using odev.dagitim.portali.repositories;
 
 namespace odev.dagitim.portali.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class OdevController : Controller
     {
         private readonly IOdevRepository _odevRepository;

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using odev.dagitim.portali.repositories;
 
 namespace odev.dagitim.portali.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize]
     public class DagitilanOdevController : Controller
     {
         private readonly IDagitilanOdevRepository _repository;
