@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = "Profil";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center mb-4">👤 Profil & Hesap Ayarları</h2>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <!-- Öğrenci Bilgileri -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> Öğrenci Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold text-muted">Ad Soyad:</div>
+                    <div class="col-md-8">@ViewBag.AdSoyad</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold text-muted">E-posta:</div>
+                    <div class="col-md-8">@ViewBag.Email</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 fw-bold text-muted">Öğrenci No:</div>
+                    <div class="col-md-8">@ViewBag.OgrenciId</div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Bildirim Ayarları -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-bell"></i> Bildirim Ayarları</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="emailBildirimleri" checked disabled>
+                    <label class="form-check-label" for="emailBildirimleri">
+                        E-posta Bildirimleri (Yeni ödev atandığında)
+                    </label>
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="deadlineBildirimleri" checked disabled>
+                    <label class="form-check-label" for="deadlineBildirimleri">
+                        Son Tarih Uyarıları (3 gün kala)
+                    </label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="tarayiciBildirimleri" disabled>
+                    <label class="form-check-label" for="tarayiciBildirimleri">
+                        Tarayıcı Bildirimleri (Real-time)
+                    </label>
+                </div>
+                <hr/>
+                <p class="text-muted small mb-0">
+                    <i class="bi bi-info-circle"></i> Bildirim ayarları şu anda aktif değildir. 
+                    İleride etkinleştirilecektir.
+                </p>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Ödevlere Dön
+            </a>
+        </div>
+    </div>
+</div>

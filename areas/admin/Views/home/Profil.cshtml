@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Admin Profil";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center mb-4">🔐 Profil & Hesap Ayarları</h2>
+
+        <!-- Admin Bilgileri -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> Yönetici Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold text-muted">E-posta:</div>
+                    <div class="col-md-8">@ViewBag.Email</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 fw-bold text-muted">Rol:</div>
+                    <div class="col-md-8"><span class="badge bg-danger">Admin</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- İstatistikler -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Sistem İstatistikleri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold text-muted">Toplam Öğrenci:</div>
+                    <div class="col-md-8">@ViewBag.ToplamOgrenci</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold text-muted">Dağıtılan Ödev:</div>
+                    <div class="col-md-8">@ViewBag.ToplamDagitilanOdev</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold text-muted">Yüklenen Ödev:</div>
+                    <div class="col-md-8">@ViewBag.ToplamYuklenenOdev</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 fw-bold text-muted">Bu Ay Yüklenen:</div>
+                    <div class="col-md-8">@ViewBag.BuAyYuklenen</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hızlı İşlemler -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-lightning"></i> Hızlı İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Sık kullanılan işlemlere hızlı erişim için aşağıdaki bağlantıları kullanabilirsiniz.
+                </p>
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("Ekle", "AssignedHomework")" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Yeni Ödev Oluştur
+                    </a>
+                    <a href="@Url.Action("Listele", "Student")" class="btn btn-info">
+                        <i class="bi bi-people"></i> Öğrenci Listesi
+                    </a>
+                    <a href="@Url.Action("Listele", "Homework")" class="btn btn-warning">
+                        <i class="bi bi-file-earmark-check"></i> Yüklenen Ödevler
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="text-center mt-4">
+            <a href="@Url.Action("Listele", "AssignedHomework")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Ana Sayfaya Dön
+            </a>
+        </div>
+    </div>
+</div>

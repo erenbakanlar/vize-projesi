@@ -1,0 +1,100 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@model List<odev.dagitim.portali.models.Student>
+
+
+
+<h2>Öğrenci Listesi</h2>
+
+<table class="table table-bordered" id="ogrenciTablo">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ad Soyad</th>
+            <th>Email</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.FullName</td>
+                <td>@item.Email</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="deleteOgrenci(@item.Id)">Sil</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h3>Öğrenci Ekle</h3>
+
+<form id="ogrenciForm">
+
+    <input type="hidden" name="Password" value="123456" />
+
+    <input type="text" name="FullName" class="form-control mb-2" placeholder="Ad Soyad" required />
+    <input type="email" name="Email" class="form-control mb-2" placeholder="Email" required />
+
+    <button type="submit" class="btn btn-primary">Öğrenci ekle</button>
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $("#ogrenciForm").submit(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "/Admin/Student/AjaxEkle",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (response) {
+
+                if (response.success) {
+
+                    let yeniSatir = `
+                        <tr>
+                            <td>${response.id}</td>
+                            <td>${response.adSoyad}</td>
+                            <td>${response.numara}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="deleteOgrenci(${response.id})">Sil</button>
+                            </td>
+                        </tr>
+                    `;
+
+                    $("#ogrenciTablo tbody").prepend(yeniSatir);
+                    $("#ogrenciForm")[0].reset();
+                }
+                else {
+                    alert("Öğrenci eklenemedi!");
+                }
+            }
+        });
+    });
+
+    function deleteOgrenci(id) {
+        if (confirm('Bu öğrenciyi silmek istediğinize emin misiniz?')) {
+            fetch('/Admin/Student/Sil/' + id, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Silme işlemi başarısız oldu.');
+                }
+            });
+        }
+    }
+</script>

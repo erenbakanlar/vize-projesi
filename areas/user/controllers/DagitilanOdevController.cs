@@ -6,11 +6,11 @@ namespace odev.dagitim.portali.Areas.User.Controllers
 {
     [Area("User")]
     [Authorize]
-    public class DagitilanOdevController : Controller
+    public class AssignedHomeworkController : Controller
     {
-        private readonly IDagitilanOdevRepository _repository;
+        private readonly IAssignedHomeworkRepository _repository;
 
-        public DagitilanOdevController(IDagitilanOdevRepository repository)
+        public AssignedHomeworkController(IAssignedHomeworkRepository repository)
         {
             _repository = repository;
         }

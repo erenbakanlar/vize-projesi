@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using odev.dagitim.portali.data;
+using odev.dagitim.portali.Hubs;
 using odev.dagitim.portali.repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,7 @@ builder.Services.AddSession(options =>
 });
 
 
+// [VIDEO - IDENTITY SETUP - BAŞLANGIÇ]
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
@@ -43,11 +45,18 @@ builder.Services
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders()
     .AddDefaultUI();
+// [VIDEO - IDENTITY SETUP - BİTİŞ]
 
 
-builder.Services.AddScoped<IOgrenciRepository, OgrenciRepository>();
-builder.Services.AddScoped<IOdevRepository, OdevRepository>();
-builder.Services.AddScoped<IDagitilanOdevRepository, DagitilanOdevRepository>();
+// [VIDEO - REPOSITORY PATTERN - BAŞLANGIÇ]
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IHomeworkRepository, HomeworkRepository>();
+builder.Services.AddScoped<IAssignedHomeworkRepository, AssignedHomeworkRepository>();
+// [VIDEO - REPOSITORY PATTERN - BİTİŞ]
+
+// [VIDEO - SIGNALR SETUP - BAŞLANGIÇ]
+builder.Services.AddSignalR();
+// [VIDEO - SIGNALR SETUP - BİTİŞ]
 
 var app = builder.Build();
 
@@ -133,6 +142,7 @@ app.MapControllerRoute(
 
 
 app.MapRazorPages();
+app.MapHub<OdevHub>("/odevHub");
 
 
 using (var scope = app.Services.CreateScope())

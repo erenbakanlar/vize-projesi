@@ -1,2 +1,147 @@
-﻿<h2>Hoş geldin @ViewBag.OgrenciAd</h2>
-<p>Burası öğrenci panelidir.</p>
+﻿@model List<UserOdevViewModel>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<h2 class="text-center mb-4">📋 Dağıtılan Ödevler</h2>
+
+@if (Model != null && Model.Any())
+{
+    var yuklenmiOdevler = Model.Where(x => x.YuklenenOdev != null).ToList();
+    var beklenenOdevler = Model.Where(x => x.YuklenenOdev == null).ToList();
+
+    if (yuklenmiOdevler.Any())
+    {
+        <div class="alert alert-success border-start border-5 border-success mb-3">
+            <h5 class="mb-0"><i class="bi bi-check-circle-fill"></i> Yüklenen Ödevler (@yuklenmiOdevler.Count)</h5>
+        </div>
+        
+        <table class="table table-bordered table-striped table-hover text-center align-middle w-100 mb-4">
+            <thead>
+                <tr>
+                    <th>Detay</th>
+                    <th>Ödev Başlığı</th>
+                    <th>Yükleme Tarihi</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in yuklenmiOdevler)
+                {
+                    <tr class="table-success">
+                        <td>
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#detayModal@(item.DagitilanOdev.Id)">
+                                <i class="bi bi-info-circle"></i>
+                            </button>
+                        </td>
+                        <td>@item.DagitilanOdev.Title</td>
+                        <td>@(item.YuklenenOdev?.UploadDate.ToString("dd.MM.yyyy HH:mm") ?? "-")</td>
+                        <td><span class="badge bg-success">✓ Yüklendi</span></td>
+                        <td>
+                            <a href="@Url.Action("Yukle", "Panel", new { id = item.DagitilanOdev.Id })" 
+                               class="btn btn-primary btn-sm">Yeniden Yükle</a>
+                        </td>
+                    </tr>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="detayModal@(item.DagitilanOdev.Id)" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title">📋 @item.DagitilanOdev.Title</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6 class="text-muted">Açıklama:</h6>
+                                    <p>@item.DagitilanOdev.Description</p>
+                                    <hr/>
+                                    <small class="text-muted d-block">
+                                        <i class="bi bi-calendar-event"></i> Son Teslim Tarihi: 
+                                        <strong class="text-danger">@item.DagitilanOdev.DueDate.ToString("dd MMMM yyyy")</strong>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+    }
+
+    if (beklenenOdevler.Any())
+    {
+        <div class="alert alert-warning border-start border-5 border-warning mb-3">
+            <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Bekleyen Ödevler (@beklenenOdevler.Count)</h5>
+        </div>
+        
+        <table class="table table-bordered table-striped table-hover text-center align-middle w-100">
+            <thead>
+                <tr>
+                    <th>Detay</th>
+                    <th>Ödev Başlığı</th>
+                    <th>Son Teslim Tarihi</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in beklenenOdevler)
+                {
+                    <tr class="table-warning">
+                        <td>
+                            <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#detayModal@(item.DagitilanOdev.Id)">
+                                <i class="bi bi-info-circle"></i>
+                            </button>
+                        </td>
+                        <td>@item.DagitilanOdev.Title</td>
+                        <td>@item.DagitilanOdev.DueDate.ToString("dd.MM.yyyy")</td>
+                        <td><span class="badge bg-warning text-dark">Bekleniyor</span></td>
+                        <td>
+                            <a href="@Url.Action("Yukle", "Panel", new { id = item.DagitilanOdev.Id })" 
+                               class="btn btn-primary btn-sm">Yükle</a>
+                        </td>
+                    </tr>
+                    
+                    <div class="modal fade" id="detayModal@(item.DagitilanOdev.Id)" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title">📋 @item.DagitilanOdev.Title</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6 class="text-muted">Açıklama:</h6>
+                                    <p>@item.DagitilanOdev.Description</p>
+                                    <hr/>
+                                    <small class="text-muted d-block">
+                                        <i class="bi bi-calendar-event"></i> Son Teslim Tarihi: 
+                                        <strong class="text-danger">@item.DagitilanOdev.DueDate.ToString("dd MMMM yyyy")</strong>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+    }
+}
+else
+{
+    <div class="alert alert-info">
+        Henüz size atanmış ödev bulunmamaktadır.
+    </div>
+}

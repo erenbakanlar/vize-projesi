@@ -1,0 +1,62 @@
+﻿@model IEnumerable<odev.dagitim.portali.models.Homework>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mb-4">📂 Yüklenen Ödevler</h2>
+
+<table class="table table-bordered table-striped table-hover text-center align-middle w-100">
+
+    <thead>
+        <tr>
+            <th>Öğrenci Ad Soyad</th>
+            <th>Ödev Başlığı</th>
+            <th>Dosya Yolu</th>
+            <th>Yükleme Tarihi</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Student?.FullName</td>
+                <td>@item.AssignedHomework?.Title</td>
+                <td style="word-break: break-all;">
+                    @item.FilePath
+                </td>
+
+                <td>
+                    @item.UploadDate.ToString("dd.MM.yyyy HH:mm")
+                </td>
+
+                <td>
+                    <a asp-action="Indir" asp-route-id="@item.Id" class="btn btn-primary btn-sm">İndir</a>
+                    <button class="btn btn-danger btn-sm" onclick="deleteOdev(@item.Id)">Sil</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<script>
+    function deleteOdev(id) {
+        if (confirm('Bu ödevi silmek istediğinize emin misiniz? Dosya da silinecektir.')) {
+            fetch('/Admin/Homework/Sil/' + id, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Silme işlemi başarısız oldu.');
+                }
+            });
+        }
+    }
+</script>
+

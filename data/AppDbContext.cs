@@ -11,8 +11,8 @@ namespace odev.dagitim.portali.data
         {
         }
 
-        public DbSet<Ogrenci> Ogrenciler { get; set; }
-        public DbSet<Odev> Odevler { get; set; }
-        public DbSet<DagitilanOdev> DagitilanOdevler { get; set; }
+        public DbSet<Student> Ogrenciler { get; set; }
+        public DbSet<Homework> Odevler { get; set; }
+        public DbSet<AssignedHomework> DagitilanOdevler { get; set; }
     }
 }
